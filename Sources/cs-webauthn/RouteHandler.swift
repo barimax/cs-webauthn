@@ -7,10 +7,10 @@
 import Vapor
 import WebAuthn
 
-struct RouteHandlerHelper {
+public struct RouteHandlerHelper: Sendable {
     /// : "passkeys", "register", "options"
     @Sendable
-    func passkeyRegisterOptions<U>(req: Request, userType: U.Type) async throws -> CreationOptionsResponse where U: WebAuthnUserProtocol {
+    public static func passkeyRegisterOptions<U>(req: Request, userType: U.Type) async throws -> CreationOptionsResponse where U: WebAuthnUserProtocol {
         let user: U = try req.auth.require(userType)
         
         // 1) WebAuthn creation options
@@ -44,7 +44,7 @@ struct RouteHandlerHelper {
     
     
     @Sendable
-    func passkeyRegistrationVerify<U>(req: Request, userType: U.Type) async throws -> HTTPStatus where U: WebAuthnUserProtocol{
+    public static func passkeyRegistrationVerify<U>(req: Request, userType: U.Type) async throws -> HTTPStatus where U: WebAuthnUserProtocol{
         let user = try req.auth.require(userType)
         
         // Client must send:
@@ -90,7 +90,7 @@ struct RouteHandlerHelper {
     }
     
     @Sendable
-    func passkeyLogin(req: Request) async throws -> RequestOptionsResponse {
+    public static func passkeyLogin(req: Request) async throws -> RequestOptionsResponse {
         let _ = try? req.content.decode(StartPasskeyLoginRequest.self)
         // You can use email as hint, but for passkeys we allow authenticator to choose.
         
@@ -113,7 +113,7 @@ struct RouteHandlerHelper {
     
     /// Use [func onLoginSuccess(_ userId: UUID) -> String ] to generate token
     @Sendable
-    func passkeyLoginVerify(req: Request, onLoginSuccess: (_ userId: UUID) async throws -> String) async throws -> LoginResponse {
+    public static func passkeyLoginVerify(req: Request, onLoginSuccess: (_ userId: UUID) async throws -> String) async throws -> LoginResponse {
         
         
         let body = try req.content.decode(Authentication.self)

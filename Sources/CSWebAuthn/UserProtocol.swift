@@ -10,4 +10,5 @@ import Vapor
 
 public protocol WebAuthnUserProtocol: Model, Authenticatable where IDValue == UUID {
     var email: String { get set }
+    var name: String { get set }
 }

@@ -10,8 +10,8 @@ import WebAuthn
 public struct RouteHandlerHelper: Sendable {
     /// : "passkeys", "register", "options"
     @Sendable
-    public static func passkeyRegisterOptions<U>(req: Request, userType: U.Type) async throws -> CreationOptionsResponse where U: WebAuthnUserProtocol {
-        let user: U = try req.auth.require(userType)
+    public static func passkeyRegisterOptions<U>(req: Request, user: U) async throws -> CreationOptionsResponse where U: WebAuthnUserProtocol {
+    
         
         // 1) WebAuthn creation options
         let webAuthnUser = PublicKeyCredentialUserEntity(
@@ -44,8 +44,8 @@ public struct RouteHandlerHelper: Sendable {
     
     
     @Sendable
-    public static func passkeyRegistrationVerify<U>(req: Request, userType: U.Type) async throws -> HTTPStatus where U: WebAuthnUserProtocol{
-        let user = try req.auth.require(userType)
+    public static func passkeyRegistrationVerify(req: Request, userId: UUID) async throws -> HTTPStatus{
+        
         
         // Client must send:
         // - WebAuthn RegistrationCredential JSON
@@ -59,7 +59,7 @@ public struct RouteHandlerHelper: Sendable {
         guard tokenPayload.kind == .registration else {
             throw Abort(.unauthorized, reason: "Wrong challenge kind")
         }
-        guard tokenPayload.userID == user.id else {
+        guard tokenPayload.userID == userId else {
             throw Abort(.unauthorized, reason: "Challenge not for this user")
         }
         
@@ -82,7 +82,7 @@ public struct RouteHandlerHelper: Sendable {
             id: result.id,
             publicKey: result.publicKey.base64URLEncodedString().asString(),
             currentSignCount: result.signCount,
-            userId: try user.requireID()
+            userId: userId
         )
         try await passkey.save(on: req.db)
         

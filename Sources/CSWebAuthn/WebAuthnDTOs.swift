@@ -46,7 +46,7 @@ public struct Authentication: Content {
 }
 
 public struct IsPasskeyEnabledRequest: Content {
-    let email: String
+    public let email: String
 }
 
 public struct IsPasskeyEnabledResponse: Content {

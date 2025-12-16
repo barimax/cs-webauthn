@@ -44,3 +44,11 @@ public struct Authentication: Content {
     let credential: AuthenticationCredential
     let challengeToken: String
 }
+
+public struct IsPasskeyEnabledRequest: Content {
+    let email: String
+}
+
+public struct IsPasskeyEnabledResponse: Content {
+    let isPasskeyEnabled: Bool
+}

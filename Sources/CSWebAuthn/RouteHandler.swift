@@ -152,4 +152,13 @@ public struct RouteHandlerHelper: Sendable {
         
         return try await .init(token: onLoginSuccess(passkey.userId))   // adapt to your UserToken
     }
+    
+    @Sendable
+    public static func isPasskeyEnabled(req: Request, userId: UUID) async throws -> IsPasskeyEnabledResponse {
+        let isPasskeyEnabledRequest = try req.content.decode(IsPasskeyEnabledRequest.self)
+        if try await Passkey.query(on: req.db).filter(\Passkey.$userId, .equal, userId).count() == 1 {
+            return .init(isPasskeyEnabled: true)
+        }
+        return .init(isPasskeyEnabled: false)
+    }
 }

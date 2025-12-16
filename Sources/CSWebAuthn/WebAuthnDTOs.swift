@@ -51,4 +51,7 @@ public struct IsPasskeyEnabledRequest: Content {
 
 public struct IsPasskeyEnabledResponse: Content {
     public let isPasskeyEnabled: Bool
+    public init(isPasskeyEnabled: Bool) {
+        self.isPasskeyEnabled = isPasskeyEnabled
+    }
 }

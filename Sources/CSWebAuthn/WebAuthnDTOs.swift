@@ -50,5 +50,5 @@ public struct IsPasskeyEnabledRequest: Content {
 }
 
 public struct IsPasskeyEnabledResponse: Content {
-    let isPasskeyEnabled: Bool
+    public let isPasskeyEnabled: Bool
 }

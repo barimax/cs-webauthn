@@ -113,7 +113,7 @@ public struct RouteHandlerHelper: Sendable {
     
     /// Use [func onLoginSuccess(_ userId: UUID) -> String ] to generate token
     @Sendable
-    public static func passkeyLoginVerify(req: Request, onLoginSuccess: (_ userId: UUID) async throws -> String) async throws -> LoginResponse {
+    public static func passkeyLoginVerify(req: Request, onLoginSuccess: (_ userId: UUID) async throws -> LoginResponse) async throws -> LoginResponse {
         
         
         let body = try req.content.decode(Authentication.self)
@@ -150,7 +150,7 @@ public struct RouteHandlerHelper: Sendable {
         // 5) Issue your normal JWT/UserToken
         
         
-        return try await .init(token: onLoginSuccess(passkey.userId))   // adapt to your UserToken
+        return try await onLoginSuccess(passkey.userId) // adapt to your UserToken
     }
     
     @Sendable

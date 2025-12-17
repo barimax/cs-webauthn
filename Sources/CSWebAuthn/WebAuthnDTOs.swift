@@ -32,7 +32,21 @@ public struct StartPasskeyLoginRequest: Content {
 
 // Your existing JWT response shape
 public struct LoginResponse: Content {
-    let token: String
+    public let token: String
+    public let userId: String
+    public let email: String
+    public let name: String
+    public let isOTP: Bool?
+    public let isPasskeyEnabled: Bool
+    
+    public init(token: String, userId: String, email: String, name: String, isOTP: Bool?, isPasskeyEnabled: Bool) {
+        self.token = token
+        self.userId = userId
+        self.email = email
+        self.name = name
+        self.isOTP = isOTP
+        self.isPasskeyEnabled = isPasskeyEnabled
+    }
 }
 
 public struct Registration: Content {
@@ -44,6 +58,7 @@ public struct Authentication: Content {
     let credential: AuthenticationCredential
     let challengeToken: String
 }
+
 
 public struct IsPasskeyEnabledRequest: Content {
     public let email: String

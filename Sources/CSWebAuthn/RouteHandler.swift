@@ -6,6 +6,7 @@
 //
 import Vapor
 import WebAuthn
+import FluentKit
 
 public struct RouteHandlerHelper: Sendable {
     /// : "passkeys", "register", "options"
@@ -154,9 +155,8 @@ public struct RouteHandlerHelper: Sendable {
     }
     
     @Sendable
-    public static func isPasskeyEnabled(req: Request, userId: UUID) async throws -> IsPasskeyEnabledResponse {
-        let isPasskeyEnabledRequest = try req.content.decode(IsPasskeyEnabledRequest.self)
-        if try await Passkey.query(on: req.db).filter(\Passkey.$userId, .equal, userId).count() == 1 {
+    public static func isPasskeyEnabled(database db: Database, userId: UUID) async throws -> IsPasskeyEnabledResponse {
+        if try await Passkey.query(on: db).filter(\Passkey.$userId, .equal, userId).count() == 1 {
             return .init(isPasskeyEnabled: true)
         }
         return .init(isPasskeyEnabled: false)

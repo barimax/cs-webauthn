@@ -31,21 +31,23 @@ public struct StartPasskeyLoginRequest: Content {
 }
 
 // Your existing JWT response shape
-public struct LoginResponse: Content {
+public struct LoginResponse<T: Codable>: Content where T: Sendable {
     public let token: String
     public let userId: String
     public let email: String
     public let name: String
     public let isOTP: Bool?
     public let isPasskeyEnabled: Bool
+    public let data: T?
     
-    public init(token: String, userId: String, email: String, name: String, isOTP: Bool?, isPasskeyEnabled: Bool) {
+    public init(token: String, userId: String, email: String, name: String, isOTP: Bool?, isPasskeyEnabled: Bool, data: T?) {
         self.token = token
         self.userId = userId
         self.email = email
         self.name = name
         self.isOTP = isOTP
         self.isPasskeyEnabled = isPasskeyEnabled
+        self.data = data
     }
 }
 

@@ -114,7 +114,7 @@ public struct RouteHandlerHelper: Sendable {
     
     /// Use [func onLoginSuccess(_ userId: UUID) -> String ] to generate token
     @Sendable
-    public static func passkeyLoginVerify(req: Request, onLoginSuccess: (_ userId: UUID) async throws -> LoginResponse) async throws -> LoginResponse {
+    public static func passkeyLoginVerify<T>(req: Request, onLoginSuccess: (_ userId: UUID) async throws -> LoginResponse<T>) async throws -> LoginResponse<T> where T: Codable & Sendable {
         
         
         let body = try req.content.decode(Authentication.self)

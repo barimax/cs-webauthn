@@ -11,12 +11,16 @@ import WebAuthn
 public extension Request {
     var webAuthn: WebAuthnManager {
         get throws {
-            let webAuthnManagerConfiguration = try self.application.webAuthnManagerConfiguration
+            guard let relyingPartyID = self.headers.first(name: "X-WebAuthn-RP-ID"),
+                  let relyingPartyName = self.headers.first(name: "X-WebAuthn-RP-Name"),
+                  let relyingPartyOrigin = self.headers.first(name: "X-WebAuthn-RP-Origin") else {
+                throw Abort(.internalServerError, reason: "Missing X-WebAuthn-* headers")
+            }
             return WebAuthnManager(
                 configuration: WebAuthnManager.Configuration(
-                    relyingPartyID: webAuthnManagerConfiguration.relyingPartyID,
-                    relyingPartyName: webAuthnManagerConfiguration.relyingPartyName,
-                    relyingPartyOrigin: webAuthnManagerConfiguration.relyingPartyOrigin
+                    relyingPartyID: relyingPartyID,
+                    relyingPartyName: relyingPartyName,
+                    relyingPartyOrigin: relyingPartyOrigin
                 )
             )
         }

@@ -16,6 +16,9 @@ public extension Request {
                   let relyingPartyOrigin = self.headers.first(name: "X-WebAuthn-RP-Origin") else {
                 throw Abort(.internalServerError, reason: "Missing X-WebAuthn-* headers")
             }
+            self.logger.debug("X-WebAuthn-RP-ID: \(relyingPartyID)")
+            self.logger.debug("X-WebAuthn-RP-Name: \(relyingPartyName)")
+            self.logger.debug("X-WebAuthn-RP-Origin: \(relyingPartyOrigin)")
             return WebAuthnManager(
                 configuration: WebAuthnManager.Configuration(
                     relyingPartyID: relyingPartyID,
